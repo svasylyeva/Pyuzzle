@@ -1,13 +1,13 @@
 from charles.charles_sudoku import Individual
-from charles.selection import fps, tournament, rank
-from charles.mutation import swap_mutation
-from charles.crossover import cycle_co, pmx_co
+#from charles.selection import fps, tournament, rank
+#from charles.mutation import swap_mutation
+#from charles.crossover import cycle_co, pmx_co
 from random import choices
 
 from data.sudoku_data import quizz, Dim, solution
-from charles.selection import fps, tournament, rank
-from charles.mutation import binary_mutation
-from charles.crossover import single_point_co
+#from charles.selection import fps, tournament, rank
+#from charles.mutation import binary_mutation
+#from charles.crossover import single_point_co
 from random import random
 from operator import  attrgetter
 import csv
@@ -34,7 +34,7 @@ def evaluate(self):
      
      fitness = 0
 
-     # Fitness function for now only penalize violation of the rules 1-3
+     # Fitness function for now only penalizes violation of the rules 1-3
      #  of rules ( rules of the game - link https://www.sudokuonline.io/tips/sudoku-rules )
      # Adding some penalty scores for violation (assuming that it will ne minimization problem )
      rows = [list() for _ in range(Dim)]
