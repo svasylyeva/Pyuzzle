@@ -42,4 +42,4 @@ if __name__ == '__main__':
     print("Starting quizz:")
     print(quizz)
     print("Randomly populated quizz:")
-    generate_random_solution(quizz)
+    print(generate_random_solution(quizz))

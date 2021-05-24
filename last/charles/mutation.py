@@ -91,7 +91,7 @@ def scramble_mutation(individual, quizz):
     return quizz
 
 
-def mutation(quizz, parent, mutation):
+def mutation(quizz, parent, mutation, number):
     
     def split(arr, size = 9):
         arrs = []
@@ -107,7 +107,7 @@ def mutation(quizz, parent, mutation):
 
     # select one subgoup index
     #index = random.randrange(len(split_parent))
-    index = sample(range(len(split_parent)), 3)
+    index = sample(range(len(split_parent)), number)
     #print(index)
 
     # Define selected subgroup for mutation
@@ -158,4 +158,4 @@ if __name__ == '__main__':
               1,2,3,5,4,8,6,9,7,
               5,4,2,9,1,6,3,7,8]
 
-    print(mutation(quizz, parent, mutation = scramble_mutation))
+    print(mutation(quizz, parent, scramble_mutation, 1))

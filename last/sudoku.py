@@ -4,6 +4,7 @@ from charles.selection import fps, tournament, rank
 from charles.mutation import mutation, swap_mutation, inversion_mutation, scramble_mutation
 from charles.crossovers import single_point_co, two_points_co, uniform_co
 from copy import deepcopy
+from charles.mutation1 import mutate_column_row
 
 
 #from random import random, choices
@@ -48,6 +49,8 @@ def evaluate(self):
      return fitness
 
 
+
+
 def get_neighbours(self):
     """A neighbourhood function for the TSP problem. Switches
     indexes around in pairs.
@@ -64,24 +67,26 @@ def get_neighbours(self):
     return n
 
 Individual.evaluate = evaluate
-#Individual.get_neighbours = get_neighbours
+Individual.get_neighbours = get_neighbours
 
 #print(Individual(popul))
 
 pop = Population(
 
-    size=100,
+    size=150,
     optim="min",
 )
 
 pop.evolve(
-    gens=100, 
-    select= tournament,
-    crossover= uniform_co,
-    mutation=mutation,
-    mutation_type=inversion_mutation,
-    co_p=0.6,
-    mu_p=0.4,
+    gens=150, 
+    select= rank,
+    crossover= single_point_co,
+    mutation=mutate_column_row,
+    mutations=mutation,
+    mutation_type=swap_mutation,
+    what='columns',
+    co_p=0.97,
+    mu_p=0.09,
     quizz = quizz,
     elitism=True
 )
