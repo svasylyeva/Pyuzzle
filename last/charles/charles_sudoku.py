@@ -62,11 +62,14 @@ class Population:
         
 
     def evolve(self, gens, select, crossover, mutation, mutations, mutation_type, co_p, mu_p,  quizz, elitism, what):
-        count = 0
+        #count = 0
 
         for gen in range(gens):
             new_pop = []
-            new_elitesi = []
+            #new_elitesi = []
+            a = deepcopy(max(self.individuals, key=attrgetter("fitness")))
+            if a == 0:
+                break
             
  
             if elitism == True:
@@ -76,23 +79,13 @@ class Population:
                     elite = deepcopy(min(self.individuals, key=attrgetter("fitness")))
 
                 # Find best individual
-                best = deepcopy(min(self.individuals, key=attrgetter("fitness")))
-                if elite.fitness == best.fitness:
-                    new_elite =  mutation(quizz, mutation(quizz, elite.representation, 'columns'), 'rows')
-                    new_elite = Individual(new_elite)
-                    if new_elite.fitness < elite.fitness:
-                        elite = new_elite
+                #best = deepcopy(min(self.individuals, key=attrgetter("fitness")))
+                #if elite.fitness == best.fitness:
+                #    new_elite =  mutation(quizz, mutation(quizz, elite.representation, 'columns'), 'rows')
+                #    new_elite = Individual(new_elite)
+                #    if new_elite.fitness < elite.fitness:
+                #        elite = new_elite
                 
-
-                
-                #if elite.fitness >= best.fitness:
-                 #   new_elites = mutations(quizz, best.representation, mutation_type, 1)
-                    #new_elites = mutation(quizz, mutation(quizz, best.representation, 'columns'), 'rows')
-                 #   new_elitesi = Individual(representation = new_elites)
-                    
-                  #  elite = new_elitesi
-
-
         
             while len(new_pop) < self.size:
                 parent1 = select(self)
@@ -106,11 +99,11 @@ class Population:
                     offspring1, offspring2 = parent1.representation, parent2.representation
                 # Mutation
                 if random() < mu_p:
-                    offspring1 = mutations(quizz, offspring1, mutation_type, 4)
+                    offspring1 = mutations(quizz, offspring1, mutation_type, 2)
                     #offspring1 = mutation(quizz, mutation(quizz, offspring1, 'columns'), 'rows')
 
                 if random() < mu_p:
-                    offspring2 = mutations(quizz, offspring2, mutation_type, 4)
+                    offspring2 = mutations(quizz, offspring2, mutation_type, 2)
                     #offspring2 = mutation(quizz, mutation(quizz, offspring2, 'columns'), 'rows')
 
                 new_pop.append(Individual(representation=offspring1))
@@ -130,16 +123,16 @@ class Population:
 
                 best = deepcopy(min(new_pop, key=attrgetter("fitness")))
                 if elite.fitness == best.fitness:
-                    count +=1
-                    if count==5:
-                        elite.fitness += 1
-                        count = 0
-                    else:
-                        pass
+                    #count +=1
+                    #if count==0:
+                    elite.fitness += 1
+                        #count = 0
+                    #else:
+                     #   pass
                 else:
-                    count = 0
+                    pass
+                    #count = 0
                 new_pop.append(elite)
-
 
             self.log()
             self.individuals = new_pop
@@ -149,6 +142,8 @@ class Population:
                 print(f'Best Individual: {max(self, key=attrgetter("fitness"))}')
             elif self.optim == "min":
                 print(f'Best Individual: {min(self, key=attrgetter("fitness"))}')
+
+
 
     def log(self):
         with open(f'run_{self.timestamp}.csv', 'a', newline='') as file:
@@ -165,5 +160,6 @@ class Population:
 
     def __repr__(self):
         return f"Population(size={len(self.individuals)}, individual_size={len(self.individuals[0])})"
+
         
         

@@ -73,20 +73,20 @@ Individual.get_neighbours = get_neighbours
 
 pop = Population(
 
-    size=150,
+    size=1000,
     optim="min",
 )
 
 pop.evolve(
-    gens=150, 
+    gens=100, 
     select= rank,
     crossover= single_point_co,
     mutation=mutate_column_row,
     mutations=mutation,
     mutation_type=swap_mutation,
     what='columns',
-    co_p=0.97,
-    mu_p=0.09,
+    co_p=0.7,
+    mu_p=0.3,
     quizz = quizz,
     elitism=True
 )
