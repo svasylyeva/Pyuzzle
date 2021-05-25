@@ -26,6 +26,13 @@ def generate_random_solution(quizz_to_populate):
     return populated_quizz
 
 
+def sudoku_representation(quizz):
+    index = 0
+    matrix = []
+    for i in range(9):
+        print(f'                    ', quizz[index:index+9])
+        index+=9
+
 if __name__ == '__main__':
     
     root_dir = os.path.dirname(os.path.abspath(__file__))

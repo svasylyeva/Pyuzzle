@@ -2,6 +2,9 @@ import pandas as pd
 import os
 import numpy
 from charles.generation import remove_blank_spaces, generate_random_solution
+# easy: 38,35
+# medium: 30,28
+# dificult: 26,25
 
 # Dimension of the standard sudoku game = 9 (9*9)
 Dim = 9
@@ -10,17 +13,21 @@ Dim = 9
 # sudoku_100.csv - first 1000 sudoku quizzes from 1 million sudoku games:
 # Link - https://www.kaggle.com/bryanpark/sudoku
 root_dir = os.path.dirname(os.path.abspath(__file__))
-path = os.path.join(root_dir, 'sudoku1000.csv')
+path = os.path.join(root_dir, 'sudoku.csv')
 df = pd.read_csv(path)
 
 # Take first quizz, will be changed to a random quizz from df afterwards
+
 quizz = " ".join(df['quizzes'].iloc[0])
 solution = " ".join(df['solutions'].iloc[0])
+quizz = quizz.replace('.','0')
+
 
 # All next examples are left here for debugging
 
 quizz = numpy.fromstring(quizz, dtype = int, sep = ' ')
 quizz = (remove_blank_spaces(quizz))
+count = len([i for i in quizz if i!=0])
 
 solution = numpy.fromstring(solution, dtype = int, sep = ' ')
 solution = (remove_blank_spaces(solution))
@@ -32,3 +39,4 @@ wrong_solution_with_f_49 = numpy.asarray([5, 5, 4, 3, 7, 1, 2, 5, 5, 3, 5, 5, 8,
 wrong_solution_with_f_49 = (remove_blank_spaces(wrong_solution_with_f_49))
 
 #popul = generate_random_solution(remove_blank_spaces(quizz))
+

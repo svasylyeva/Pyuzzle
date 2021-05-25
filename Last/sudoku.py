@@ -1,10 +1,10 @@
+from charles.generation import sudoku_representation
 from charles.charles_sudoku import Individual, Population
-from data.sudoku_data import quizz, Dim
+from data.sudoku_data import quizz, Dim, count
 from charles.selection import fps, tournament, rank
 from charles.mutation import mutation, swap_mutation, inversion_mutation, scramble_mutation
 from charles.crossovers import single_point_co, two_points_co, uniform_co
 from copy import deepcopy
-from charles.mutation1 import mutate_column_row
 
 
 #from random import random, choices
@@ -66,28 +66,38 @@ def get_neighbours(self):
     n = [Individual(i) for i in n]
     return n
 
+print("")
+print('Givens: ', count)
+print("")
+print("SUDOKU TO BE SOLVED:")
+sudoku_representation(quizz)
+print("")
+
+
 Individual.evaluate = evaluate
 Individual.get_neighbours = get_neighbours
 
-#print(Individual(popul))
-
 pop = Population(
-
     size=1000,
     optim="min",
+    total_gens='100', 
+    select_type= 'rank',
+    crossover_type= 'single_point_co',
+    mutation_type='swap_mutation',
+    #givens = count,
 )
 
 pop.evolve(
-    gens=50, 
+    gens=100, 
     select= rank,
     crossover= single_point_co,
-    mutation=mutate_column_row,
     mutations=mutation,
     mutation_type=swap_mutation,
-    what='columns',
     co_p=0.7,
     mu_p=0.3,
     quizz = quizz,
     elitism=True
 )
+
+
 

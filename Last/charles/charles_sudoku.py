@@ -4,9 +4,9 @@ import numpy as np
 from copy import deepcopy
 import csv
 import time
-from charles.generation import generate_random_solution, remove_blank_spaces
-from data.sudoku_data import quizz
-import sys
+from charles.generation import generate_random_solution, sudoku_representation
+from data.sudoku_data import quizz, count
+#import sys
 
 class Individual:
     def __init__(
@@ -44,33 +44,35 @@ class Individual:
 
     def __repr__(self):
         return f"Individual(size={len(self.representation)}); Fitness: {self.fitness}"
-    #def __repr__(self):
-    #    return f"Individual: {self.representation}; Fitness: {self.fitness}"
+
 
 class Population:
-    def __init__(self, size, optim):
+    def __init__(self, size, optim, total_gens, select_type, crossover_type, mutation_type):
         self.individuals = []
         self.size = size
         self.optim = optim
         self.gen = 1
+        self.givens = count
+        self.total_gens = total_gens
+        self.select_type = select_type
+        self.crossover_type = crossover_type
+        self.mutation_type = mutation_type
         self.timestamp = int(time.time())
+
         for _ in range(size):
             self.individuals.append(
                 Individual(representation = generate_random_solution(quizz))
             )
 
         
-
-    def evolve(self, gens, select, crossover, mutation, mutations, mutation_type, co_p, mu_p,  quizz, elitism, what):
-        #count = 0
+    def evolve(self, gens, select, crossover, mutations, mutation_type, co_p, mu_p,  quizz, elitism):
 
         for gen in range(gens):
-            #new_elitesi = []
 
             best_fitness = min(self, key=attrgetter("fitness"))
+            
             # If not find solution
             if best_fitness.fitness != 0:
-
                 new_pop = []
  
                 if elitism == True:
@@ -78,14 +80,6 @@ class Population:
                         elite = deepcopy(max(self.individuals, key=attrgetter("fitness")))
                     elif self.optim == "min":
                         elite = deepcopy(min(self.individuals, key=attrgetter("fitness")))
-
-                # Find best individual
-                #best = deepcopy(min(self.individuals, key=attrgetter("fitness")))
-                #if elite.fitness == best.fitness:
-                #    new_elite =  mutation(quizz, mutation(quizz, elite.representation, 'columns'), 'rows')
-                #    new_elite = Individual(new_elite)
-                #    if new_elite.fitness < elite.fitness:
-                #        elite = new_elite
                 
                 while len(new_pop) < self.size:
                     parent1 = select(self)
@@ -100,11 +94,9 @@ class Population:
                     # Mutation
                     if random() < mu_p:
                         offspring1 = mutations(quizz, offspring1, mutation_type, 2)
-                        #offspring1 = mutation(quizz, mutation(quizz, offspring1, 'columns'), 'rows')
 
                     if random() < mu_p:
                         offspring2 = mutations(quizz, offspring2, mutation_type, 2)
-                        #offspring2 = mutation(quizz, mutation(quizz, offspring2, 'columns'), 'rows')
 
                     new_pop.append(Individual(representation=offspring1))
                     if len(new_pop) < self.size:
@@ -119,18 +111,12 @@ class Population:
                 
                     best = deepcopy(min(new_pop, key=attrgetter("fitness")))
                     if elite.fitness == best.fitness:
-                        #count +=1
-                        #if count==5:
                         elite.fitness += 1
-                            #count = 0
-                        #else:
-                        #   pass
                     else:
                         pass
-                        #count = 0
                     new_pop.append(elite)
 
-                self.log()
+                #self.log()
                 self.individuals = new_pop
                 self.gen += 1
  
@@ -142,17 +128,25 @@ class Population:
             # If find solution
             else:        
 
-                self.log()
+                #self.log()
                 self.individuals = new_pop
                 self.gen += 1
+
                 if self.optim == "max":
                     solution = max(self, key=attrgetter("fitness"))
-                    print(f'Solution:', solution.representation)
+                    print(f'Solved SUDOKU:', sudoku_representation(solution))
+                    
                 elif self.optim == "min":
                     solution = min(self, key=attrgetter("fitness"))
-                    print(f'Solution:', solution.representation)
+                    print(" ")
+                    print('SOLVED SUDOKU:')
+                    sudoku_representation(solution)
+                    print("")
+                    print(f'Solve in {self.gen} generations!')
 
                 break
+
+        self.save()
 
 
     def log(self):
@@ -160,6 +154,15 @@ class Population:
             writer = csv.writer(file)
             for i in self:
                 writer.writerow([self.gen, i.representation, i.fitness])
+ 
+
+    def save(self):
+        with open(f'fitness_easy.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            best = min(self, key=attrgetter("fitness"))
+            writer.writerow([self.total_gens, self.size, self.givens, self.gen, best.fitness, self.select_type, self.crossover_type, self.mutation_type])
+
+
 
 
     def __len__(self):
@@ -170,8 +173,3 @@ class Population:
 
     def __repr__(self):
         return f"Population(size={len(self.individuals)}, individual_size={len(self.individuals[0])})"
-
-
-
-        
-        
