@@ -4,7 +4,7 @@ import numpy as np
 from copy import deepcopy
 import csv
 import time
-from charles.generation import generate_random_solution, remove_blank_spaces
+from charles.generation import generate_random_solution, remove_blank_spaces, sudoku_representation
 from data.sudoku_data import quizz
 import sys
 
@@ -147,11 +147,14 @@ class Population:
                 self.gen += 1
                 if self.optim == "max":
                     solution = max(self, key=attrgetter("fitness"))
-                    print(f'Solution:', solution.representation)
+                    print(f'Solved SUDOKU:', sudoku_representation(solution))
+                    
                 elif self.optim == "min":
                     solution = min(self, key=attrgetter("fitness"))
-                    print(f'Solution:', solution.representation)
-
+                    print(" ")
+                    print('SOLVED SUDOKU:')
+                    sudoku_representation(solution)
+                    print("")
                 break
 
 

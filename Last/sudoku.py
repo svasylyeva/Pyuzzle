@@ -1,3 +1,4 @@
+from charles.generation import sudoku_representation
 from charles.charles_sudoku import Individual, Population
 from data.sudoku_data import quizz, Dim
 from charles.selection import fps, tournament, rank
@@ -66,13 +67,15 @@ def get_neighbours(self):
     n = [Individual(i) for i in n]
     return n
 
+print("")
+print("SUDOKU TO BE SOLVED:")
+sudoku_representation(quizz)
+print("")
+
 Individual.evaluate = evaluate
 Individual.get_neighbours = get_neighbours
 
-#print(Individual(popul))
-
 pop = Population(
-
     size=1000,
     optim="min",
 )
