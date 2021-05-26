@@ -82,15 +82,15 @@ pop = Population(
     optim="min",
     total_gens='100', 
     select_type= 'rank',
-    crossover_type= 'single_point_co',
+    crossover_type= 'two_points_co',
     mutation_type='swap_mutation',
-    #givens = count,
+
 )
 
 pop.evolve(
-    gens=100, 
+    gens=250, 
     select= rank,
-    crossover= single_point_co,
+    crossover= two_points_co,
     mutations=mutation,
     mutation_type=swap_mutation,
     co_p=0.7,

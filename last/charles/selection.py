@@ -29,9 +29,12 @@ def fps(population):
         # Get a 'position' on the wheel
         spin = uniform(0, 1)
         position = 0
+        new_sum = 0
         # Find individual in the position of the spin
+        for i in population:
+            new_sum += (total_fitness/i.fitness)
         for individual in population:
-            position += (1-individual.fitness/total_fitness)
+            position += (total_fitness/individual.fitness)/new_sum
             if position > spin:
                 return individual
 
